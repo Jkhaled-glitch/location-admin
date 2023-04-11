@@ -1,7 +1,7 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource";
-import { Link } from "react-router-dom";
+import { productColumns } from "../../datatablesource";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -20,51 +20,36 @@ const Datatable = () => {
         let list = [];
         try {
           let i =1
-          const querySnapshot = await getDocs(collection(db, "USERDATA"));
+          const querySnapshot = await getDocs(collection(db, "HouseCollection"));
           querySnapshot.forEach((doc) => {
             list.push({ id: doc.id, ...doc.data() });
           });
           setData(list);
-          console.log(list);
         } catch (err) {
           console.log(err);
         }
       }
      fetchData();
 
-    // LISTEN (REALTIME)
-    /*
-    const unsub = onSnapshot(
-      collection(db, "USERDATA"),
-      (snapShot) => {
-        let list = [];
-        snapShot.docs.forEach((doc) => {
-          console.log(doc)
-          list.push({ id: doc.id, ...doc });
-        });
-        setData(list);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    console.log(data)
-
-    return () => {
-      unsub();
-    };
-     */
+    
   }, []);
+
+  const navigate = useNavigate()
  
 
   const handleDelete = async (id) => {
     try {
-      await deleteDoc(doc(db, "USERDATA", id));
+      await deleteDoc(doc(db, "HouseCollection", id));
       setData(data.filter((item) => item.id !== id));
     } catch (err) {
       console.log(err);
     }
+  };
+  const handleView =  (id) => {
+    navigate(`/products/${id}`)
+  };
+  const handleEdit =  (id) => {
+    navigate(`/products/edit/${id}`)
   };
 
   const actionColumn = [
@@ -75,9 +60,13 @@ const Datatable = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
+            
+              <div className="viewButton"
+              onClick={() => handleView(params.row.id)} >View</div>
+
+<div className="viewButton"
+              onClick={() => handleEdit(params.row.id)} >Edit</div>
+            
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
@@ -92,18 +81,25 @@ const Datatable = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Add New User
-        <Link to="/users/new" className="link">
+        PRODUCTS
+        <Link to="/products/new" className="link">
           Add New
         </Link>
       </div>
+
       <DataGrid
         className="datagrid"
         rows={data}
-        columns={userColumns.concat(actionColumn)}
+        columns={productColumns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
+    
+        getRowClassName={(params) =>
+          params.row.availability == false ? 'row' : null
+        }
+       
+
      />
      
    

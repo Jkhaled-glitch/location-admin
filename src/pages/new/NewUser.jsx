@@ -18,9 +18,10 @@ import { Upload } from "@mui/icons-material";
 
 
 const New = ({ inputs, title }) => {
+
   const [file, setFile] = useState(null);
   const [per, setPer] = useState(null);
-  const [type, setType]=useState("consumer")
+  const [type, setType]=useState("CUSTOMER")
   const [data, setData] = useState({accountType: type,
     profileUrl:"https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
   });
@@ -33,7 +34,8 @@ const New = ({ inputs, title }) => {
     
   },[file]);
 
-  const uploadFile = async() => {
+  const uploadFile = async(file) => {
+    return new Promise((resolve, reject) => {
     const name = new Date().getTime() + file.name;
     const storageRef = ref(storage, "USERS_IMAGES/"+name);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -43,33 +45,34 @@ const New = ({ inputs, title }) => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload image is " + progress + "% done");
+        
         setStatus("Upload image is " + progress + "% done")
         setPer(progress);
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
+            
             break;
           case "running":
-            console.log("Upload is running");
+            
             break;
           default:
             break;
         }
       },
       (error) => {
-        setStatus("Upload is Image Failed")
-        setStatus(error.message)
+        setStatus("Upload Image is  Failed")
         console.log(error);
+        reject(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setData((prev)=>({prev, profileUrl: downloadURL }))
+          resolve(downloadURL);
           
         });
        
       }
     );
+    })
   };
 
 
@@ -94,17 +97,29 @@ const New = ({ inputs, title }) => {
     setStatus("Uploading Data ...")
     setPer(50);
     try {
+      
 
       const res = await createUserWithEmailAndPassword(
         auth,
         data.email,
         data.password
       );
-    
+ 
+    let url = ""
+      if(file){
+        const promise = uploadFile(file);
+        url =  await new Promise((resolve) => {
+          resolve(promise)
+      });
+}
+
+   
       await setDoc(doc(db, "USERDATA", res.user.email), {
         ...data,
+        profileUrl: url
       });
-      file && uploadFile();
+      
+      
 
       setStatus("User Added Successfully")
 
@@ -114,7 +129,8 @@ const New = ({ inputs, title }) => {
       ,
         2000
       )
-      //navigate()
+     
+      
     } catch (err) {
       console.log(err);
       setStatus(err.message)
@@ -184,26 +200,26 @@ const New = ({ inputs, title }) => {
                 <h5>Account Type</h5>
                 <div className="formRadio" > 
                     <input
-                      id="consumer"
+                      id="CUSTOMER"
                       type="radio"
-                      value="consumer"
-                      checked={type === 'consumer'}
+                      value="CUSTOMER"
+                      checked={type === 'CUSTOMER'}
                       onChange={handleType}
                       
                     />
-                    <label htmlFor="consumer">Consumer</label>
+                    <label htmlFor="consumer">customer</label>
                 </div>
                 <div className="formRadio" > 
                     
                     <input
-                      id="owner"
+                      id="OWNER"
                       type="radio"
-                      value="owner"
-                      checked={type === 'owner'}
+                      value="OWNER"
+                      checked={type === 'OWNER'}
                       onChange={handleType}
                       
                     />
-                    <label htmlFor="owner">Owner</label>
+                    <label htmlFor="OWNER">owner</label>
 
                 </div>
               </div>

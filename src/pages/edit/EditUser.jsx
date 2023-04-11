@@ -1,12 +1,15 @@
-import "./new.scss";
+import "./edit.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   addDoc,
   collection,
   doc,
+  getDoc,
+  updateDoc,
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
@@ -17,23 +20,51 @@ import { useNavigate } from "react-router-dom";
 import { Upload } from "@mui/icons-material";
 
 
-const New = ({ inputs, title }) => {
+const Edit = ({  title }) => {
+ 
+
+  const [data, setData] = useState({});
+
+    let { userId } = useParams();
+    const [type, setType]=useState(null) 
+    
+    useEffect(() => {
+
+
+        const fetchUserData = async () => {
+
+            const docRef = doc(db, "USERDATA", userId);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+
+              setData({ ...docSnap.data() });
+              
+            } else {
+              alert("data not found for this email")
+              navigate("/users")
+              
+             
+            }
+
+          }
+      
+        fetchUserData();
+    }, [userId]);
+
+
+
+
   const [file, setFile] = useState(null);
   const [per, setPer] = useState(null);
-  const [type, setType]=useState("consumer")
-  const [data, setData] = useState({accountType: type,
-    profileUrl:"https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-  });
+ 
+  
   const [status,setStatus] = useState(null)
   const navigate = useNavigate()
   
-  useEffect(()=>{
-    
-    //file &&uploadFile();
-    
-  },[file]);
 
-  const uploadFile = async() => {
+  const uploadFile = async(file) => {
+    return new Promise((resolve, reject) => {
     const name = new Date().getTime() + file.name;
     const storageRef = ref(storage, "USERS_IMAGES/"+name);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -43,33 +74,34 @@ const New = ({ inputs, title }) => {
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload image is " + progress + "% done");
+        
         setStatus("Upload image is " + progress + "% done")
         setPer(progress);
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
+            
             break;
           case "running":
-            console.log("Upload is running");
+            
             break;
           default:
             break;
         }
       },
       (error) => {
-        setStatus("Upload is Image Failed")
-        setStatus(error.message)
+        setStatus("Upload Image is  Failed")
         console.log(error);
+        reject(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setData((prev)=>({prev, profileUrl: downloadURL }))
+          resolve(downloadURL);
           
         });
        
       }
     );
+    })
   };
 
 
@@ -81,54 +113,91 @@ const New = ({ inputs, title }) => {
  
   
   const handleType = (event) => {
-    setType(event.target.value)
-    setData({ ...data, accountType: type })
+
+    setData({ ...data, accountType: event.target.value })
     
   }
 
-  const handleAdd = async (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
-
-    
-    
-    setStatus("Uploading Data ...")
+    setStatus("Editing Data ...")
     setPer(50);
     try {
-
-      const res = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-    
-      await setDoc(doc(db, "USERDATA", res.user.email), {
-        ...data,
-      });
-      file && uploadFile();
-
-      setStatus("User Added Successfully")
-
-      setTimeout(()=>
       
-        navigate('/users')
-      ,
-        2000
-      )
-      //navigate()
+ 
+    let url = data.profileUrl
+      if(file){
+        const promise = uploadFile(file);
+        url =  await new Promise((resolve) => {
+          resolve(promise)
+      });
+}
+
+   
+      await updateDoc(doc(db, "USERDATA", data.email), {
+        ...data,
+        profileUrl: url
+      });
+      
+      
+
+      setStatus("User Editing Successfully")
+      setPer(null)
+      
     } catch (err) {
       console.log(err);
       setStatus(err.message)
       setPer(null)
     }
     
-    status &&  setTimeout(()=>
+    
+  }
+  status &&  setTimeout(()=>
       setStatus(null)
     ,
       4000
     )
-    
-   
+ 
 
+  const  inputs = [
+    {
+      id: "name",
+      label: "name",
+      type: "text",
+      value:data.name,
+      placeholder: "Khaled",
+    },
+    {
+      id: "lastName",
+      label: "lastName",
+      type: "text",
+      value:data.lastName,
+      placeholder: "Jouablia",
+    },
+    {
+      id: "phone",
+      label: "Phone Number",
+      type: "number",
+      value:data.phone,
+      placeholder: "53 076 588",
+    },
+    {
+      id: "password",
+      label: "Password",
+      type: "text",
+      value : data.password
+    },
+    {
+      id: "address",
+      label: "Address",
+      type: "text",
+      value: data.address,
+      placeholder: "Elton St. 216 NewYork",
+    },
+  ];
+
+  if(!data){
+    return <h2>Reading Data ...</h2>
   }
 
   return (
@@ -145,37 +214,38 @@ const New = ({ inputs, title }) => {
               src={
                 file
                   ? URL.createObjectURL(file)
-                  : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                  : data.profileUrl
               }
               alt=""
               onClick={()=> document.getElementById("file").click()}
             />
           </div>
           <div className="right">
-            <form onSubmit={handleAdd}>
-              <div className="formInput">
-                <label htmlFor="file">
-                  Image: <DriveFolderUploadOutlinedIcon className="icon" />
-                </label>
+            <form onSubmit={handleEdit}>
+
+             
+                
                 <input
                   type="file"
                   id="file"
                   onChange={(e) => setFile(e.target.files[0])}
                   style={{ display: "none" }}
                 />
-              </div>
-
+             
+              
               {inputs.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
                   <input
                     id={input.id}
                     type={input.type}
+                    value={input.value}
                     placeholder={input.placeholder}
                     onChange={handleInput}
                     required
                   />
                 </div>
+              
               ))}
 
               
@@ -184,26 +254,26 @@ const New = ({ inputs, title }) => {
                 <h5>Account Type</h5>
                 <div className="formRadio" > 
                     <input
-                      id="consumer"
+                      id="CUSTOMER"
                       type="radio"
-                      value="consumer"
-                      checked={type === 'consumer'}
+                      value="CUSTOMER"
+                      checked={data.accountType === 'CUSTOMER'}
                       onChange={handleType}
                       
                     />
-                    <label htmlFor="consumer">Consumer</label>
+                    <label htmlFor="consumer">customer</label>
                 </div>
                 <div className="formRadio" > 
                     
                     <input
-                      id="owner"
+                      id="OWNER"
                       type="radio"
-                      value="owner"
-                      checked={type === 'owner'}
+                      value="OWNER"
+                      checked={data.accountType === 'OWNER'}
                       onChange={handleType}
                       
                     />
-                    <label htmlFor="owner">Owner</label>
+                    <label htmlFor="OWNER">owner</label>
 
                 </div>
               </div>
@@ -211,7 +281,7 @@ const New = ({ inputs, title }) => {
               
                 
               <button disabled={per !== null && per < 100} type="submit">
-                ADD
+                EDIT
               </button>
             </form>
             
@@ -225,4 +295,4 @@ const New = ({ inputs, title }) => {
   );
 };
 
-export default New;
+export default Edit;

@@ -1,7 +1,7 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -10,7 +10,11 @@ import {
   doc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../../firebase";
+
+import { db,auth } from "../../firebase";
+import { deleteUser } from "firebase/auth";
+
+
 
 const Datatable = () => {
   const [data, setData] = useState([]);
@@ -27,45 +31,73 @@ const Datatable = () => {
           setData(list);
           console.log(list);
         } catch (err) {
-          console.log(err);
         }
       }
      fetchData();
 
-    // LISTEN (REALTIME)
-    /*
-    const unsub = onSnapshot(
-      collection(db, "USERDATA"),
-      (snapShot) => {
-        let list = [];
-        snapShot.docs.forEach((doc) => {
-          console.log(doc)
-          list.push({ id: doc.id, ...doc });
-        });
-        setData(list);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    console.log(data)
-
-    return () => {
-      unsub();
-    };
-     */
+  
   }, []);
+
+  const navigate = useNavigate()
+
+  const handleView =  (id) => {
+    navigate(`/users/${id}`)
+  };
+  const handleEdit =  (id) => {
+    navigate(`/users/edit/${id}`)
+  };
  
 
   const handleDelete = async (id) => {
+    
+    
+          //var admin = require("firebase-admin");
+          //const { initializeApp } = require('firebase-admin/app');
+          /*
+          
+          admin.initializeApp({
+            credential: admin.credential.cert(process.env.SERVICE_ACCOUNT_KEY),
+            databaseURL: process.env.DTABASE_URL
+          });
+          
+          admin.auth().getUserByEmail(id)
+          .then((userRecord) => {
+          // Supprimez l'utilisateur
+          admin.auth().deleteUser(userRecord.uid)
+            .then(() => {
+              console.log(`L'utilisateur ${id} a été supprimé avec succès.`);
+            })
+            .catch((error) => {
+              console.error(`Une erreur s'est produite lors de la suppression de l'utilisateur ${id}:`, error);
+            });
+        })
+        .catch((error) => {
+          console.error(`Une erreur s'est produite lors de la récupération de l'utilisateur ${id}:`, error);
+        });
+      */
+    
     try {
+     
+     
+
+     // Delete user from Firebase Authentication
+     // await admin.auth().deleteUser(id);
+
+    
+            
+
+
+      
+      // supprimer l'utilisateur de la base de données Firestore
       await deleteDoc(doc(db, "USERDATA", id));
+      
       setData(data.filter((item) => item.id !== id));
     } catch (err) {
       console.log(err);
     }
-  };
+  }
+
+ 
 
   const actionColumn = [
     {
@@ -75,9 +107,14 @@ const Datatable = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
+           
+              <div className="viewButton"
+              onClick={()=> handleView(params.row.id)}>View</div>
+              
+
+              <div className="viewButton"
+              onClick={()=> handleEdit(params.row.id)}>Edit</div>
+           
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row.id)}
@@ -92,7 +129,7 @@ const Datatable = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Add New User
+        USERS
         <Link to="/users/new" className="link">
           Add New
         </Link>
@@ -102,8 +139,10 @@ const Datatable = () => {
         rows={data}
         columns={userColumns.concat(actionColumn)}
         pageSize={9}
+
         rowsPerPageOptions={[9]}
         checkboxSelection
+        
      />
      
    

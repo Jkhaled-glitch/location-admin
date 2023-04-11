@@ -8,6 +8,7 @@ import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlin
 import { useEffect, useState } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Widget = ({ type }) => {
   const [amount, setAmount] = useState(null);
@@ -20,7 +21,7 @@ const Widget = ({ type }) => {
         title: "USERS",
         isMoney: false,
         link: "See all users",
-        query:"users",
+        query:"USERDATA",
         icon: (
           <PersonOutlinedIcon
             className="icon"
@@ -64,7 +65,7 @@ const Widget = ({ type }) => {
     case "product":
       data = {
         title: "PRODUCTS",
-        query:"products",
+        query:"HouseCollection",
         link: "See details",
         icon: (
           <AccountBalanceWalletOutlinedIcon
@@ -87,28 +88,24 @@ const Widget = ({ type }) => {
       const lastMonth = new Date(new Date().setMonth(today.getMonth() - 1));
       const prevMonth = new Date(new Date().setMonth(today.getMonth() - 2));
 
-      const lastMonthQuery = query(
+      const all= query(
         collection(db, data.query),
-        where("timeStamp", "<=", today),
-        where("timeStamp", ">", lastMonth)
-      );
-      const prevMonthQuery = query(
-        collection(db, data.query),
-        where("timeStamp", "<=", lastMonth),
-        where("timeStamp", ">", prevMonth)
+        //where("timeStamp", "<=", today)
       );
 
-      const lastMonthData = await getDocs(lastMonthQuery);
-      const prevMonthData = await getDocs(prevMonthQuery);
+      const allData = await getDocs(all);
 
-      setAmount(lastMonthData.docs.length);
-      setDiff(
+      setAmount(allData.docs.length);
+     /* setDiff(
         ((lastMonthData.docs.length - prevMonthData.docs.length) / prevMonthData.docs.length) *
           100
       );
+      */
     };
     fetchData();
   }, []);
+
+  const navigate=useNavigate();
 
   return (
     <div className="widget">
@@ -117,7 +114,8 @@ const Widget = ({ type }) => {
         <span className="counter">
           {data.isMoney && "$"} {amount}
         </span>
-        <span className="link">{data.link}</span>
+        
+        <span onClick={()=>navigate("/"+ data.title.toLowerCase())} className="link">{data.link}</span>
       </div>
       <div className="right">
         <div className={`percentage ${diff < 0 ? "negative" : "positive"}`}>

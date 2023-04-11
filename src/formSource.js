@@ -1,27 +1,27 @@
 export const userInputs = [
     {
-      id: "username",
-      label: "Username",
+      id: "name",
+      label: "name",
       type: "text",
-      placeholder: "john_doe",
+      placeholder: "Khaled",
     },
     {
-      id: "displayName",
-      label: "Name and surname",
+      id: "lastName",
+      label: "lastName",
       type: "text",
-      placeholder: "John Doe",
+      placeholder: "Jouablia",
+    },
+    {
+      id: "phone",
+      label: "Phone Number",
+      type: "number",
+      placeholder: "53 076 588",
     },
     {
       id: "email",
       label: "Email",
       type: "mail",
-      placeholder: "john_doe@gmail.com",
-    },
-    {
-      id: "phone",
-      label: "Phone",
-      type: "text",
-      placeholder: "+1 234 567 89",
+      placeholder: "Jb_Khaled@gmail.com",
     },
     {
       id: "password",
@@ -34,44 +34,69 @@ export const userInputs = [
       type: "text",
       placeholder: "Elton St. 216 NewYork",
     },
-    {
-      id: "country",
-      label: "Country",
-      type: "text",
-      placeholder: "USA",
-    },
   ];
   
   export const productInputs = [
     {
-      id: 1,
-      label: "Title",
+      id: "contactPerson",
+      label: "ContactPerson",
       type: "text",
-      placeholder: "Apple Macbook Pro",
+      placeholder: "khaled",
     },
     {
-      id: 2,
-      label: "Description",
-      type: "text",
-      placeholder: "Description",
+      id: "phone",
+      label: "Owner Phone",
+      type: "number",
+      placeholder: "53 076 588",
     },
     {
-      id: 3,
-      label: "Category",
-      type: "text",
-      placeholder: "Computers",
-    },
-    {
-      id: 4,
+      id: "price",
       label: "Price",
-      type: "text",
-      placeholder: "100",
+      type: "number",
+      placeholder: "500",
     },
     {
-      id: 5,
-      label: "Stock",
+      id: "city",
+      label: "City",
       type: "text",
-      placeholder: "in stock",
+      placeholder: "Rades",
+    },
+    {
+      id: "location",
+      label: "Location",
+      type: "text",
+      placeholder: "rades center",
+    },
+    {
+      id: "size",
+      label: "House Size",
+      type: "text",
+      placeholder: "S+2",
+    },
+    {
+      id: "houseNo",
+      label: "House Number",
+      type: "number",
+      placeholder: "86",
+    },
+    {
+      id: "ownerEmail",
+      label: "Owner Email",
+      type: "mail",
+      placeholder: "FlenbnFlen@gmail.com",
+    },
+    {
+      id: "street",
+      label: "Street",
+      type: "text",
+      placeholder: "Street",
+    },
+    
+    {
+      id: "post",
+      label: "Post Number",
+      type: "number",
+      placeholder: "8160",
     },
   ];
   
