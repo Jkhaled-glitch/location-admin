@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/location-admin/static/css/main.9e89c504.css",
-    "main.js": "/location-admin/static/js/main.ac053915.js",
+    "main.js": "/location-admin/static/js/main.e8f643d3.js",
     "index.html": "/location-admin/index.html",
     "main.9e89c504.css.map": "/location-admin/static/css/main.9e89c504.css.map",
-    "main.ac053915.js.map": "/location-admin/static/js/main.ac053915.js.map"
+    "main.e8f643d3.js.map": "/location-admin/static/js/main.e8f643d3.js.map"
   },
   "entrypoints": [
     "static/css/main.9e89c504.css",
-    "static/js/main.ac053915.js"
+    "static/js/main.e8f643d3.js"
   ]
 }
