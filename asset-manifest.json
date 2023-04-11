@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/location-admin/static/css/main.9e89c504.css",
+    "main.js": "/location-admin/static/js/main.5dda5afc.js",
+    "index.html": "/location-admin/index.html",
+    "main.9e89c504.css.map": "/location-admin/static/css/main.9e89c504.css.map",
+    "main.5dda5afc.js.map": "/location-admin/static/js/main.5dda5afc.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9e89c504.css",
+    "static/js/main.5dda5afc.js"
+  ]
+}
