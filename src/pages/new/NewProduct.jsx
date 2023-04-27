@@ -23,13 +23,16 @@ import { Upload } from "@mui/icons-material";
 
 const New = ({ inputs, title }) => {
  
-  const [images, setImages] = useState({});
   const [files, setFiles] = useState([]);
   const [per, setPer] = useState(null);
   const [type, setType]=useState(true)
-  const [data, setData] = useState({availability: type,
-    images:images
-  });
+  const [data, setData] = useState(
+        {
+          authorized: true,
+          views:0,
+          availability: type,
+          images:{}
+        }   );
   const [status,setStatus] = useState(null)
   const navigate = useNavigate()
 
@@ -74,6 +77,7 @@ const New = ({ inputs, title }) => {
     e.preventDefault();
   
     setStatus("Uploading ...");
+
     setPer(50);
   
     try {

@@ -9,6 +9,7 @@ import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext,useEffect,useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import {
   collection,
@@ -25,9 +26,8 @@ import { db } from "../../firebase";
 
 const Navbar = () => {
   const { dispatch } = useContext(DarkModeContext);
-
+  const navigate = useNavigate()
   const { currentUser } = useContext(AuthContext);
-
   const [data, setData] = useState({});
   const [notifications,setNotifications] = useState(0)
 
@@ -56,8 +56,8 @@ const Navbar = () => {
          
           const querySnapshot = await getDocs(collection(db, "HouseCollection"));
           querySnapshot.forEach((doc) => {
-            let availability= doc.data().availability;
-            !availability && list.push({ id: doc.id, ...doc.data() });
+            let authorized= doc.data().authorized;
+            !authorized && list.push({ id: doc.id });
           });
           setNotifications(list.length);
         } catch (err) {
@@ -97,11 +97,14 @@ const Navbar = () => {
           </div>
           <div className="item">
             <NotificationsNoneOutlinedIcon className="icon" />
-            <div className="counter">{notifications}</div>
+            
+            <div className="counter" 
+                  onClick={()=>navigate("/admins/notifications")}>     {notifications}
+            </div>
           </div>
           <div className="item">
             <ChatBubbleOutlineOutlinedIcon className="icon" />
-            <div className="counter">2</div>
+            <div className="counter">x</div>
           </div>
           <div className="item">
             <ListOutlinedIcon className="icon" />

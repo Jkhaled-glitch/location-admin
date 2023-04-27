@@ -1,3 +1,4 @@
+import "./style/dark.scss";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 
@@ -18,15 +19,19 @@ import NewAdmin from "./pages/new/NewAdmin";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { productInputs, userInputs } from "./formSource";
-import "./style/dark.scss";
+
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/AuthContext";
+
+import { UseAutocompleteParametersn } from "@mui/material";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
   const {currentUser} = useContext(AuthContext)
+
+  
 
   const RequireAuth = ({ children }) => {
     return currentUser ? children : <Navigate to="/login" />;
@@ -35,9 +40,11 @@ function App() {
   return (
     <div className={darkMode ? "app dark" : "app"}>
       <BrowserRouter>
+      
         <Routes>
           <Route path="/">
             <Route path="login" element={<Login />} />
+
             <Route
               index
               element={
@@ -97,7 +104,6 @@ function App() {
 
             </Route>
 
-            
 
             <Route path="products">
               <Route
@@ -177,6 +183,7 @@ function App() {
 
           </Route>
         </Routes>
+
       </BrowserRouter>
     </div>
   );

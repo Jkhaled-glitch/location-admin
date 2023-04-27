@@ -96,7 +96,7 @@ const Datatable = () => {
         checkboxSelection
     
         getRowClassName={(params) =>
-          params.row.availability == false ? 'row' : null
+          params.row.authorized == false ? 'row' : null
         }
        
 

@@ -85,6 +85,7 @@ const Sidebar = () => {
             <span>Logs</span>
           </li>
           
+          
           <p className="title">AUTHENTIFICATIONS</p>
           
          

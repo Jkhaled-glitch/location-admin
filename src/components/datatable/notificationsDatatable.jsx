@@ -22,8 +22,8 @@ const Datatable = () => {
          
           const querySnapshot = await getDocs(collection(db, "HouseCollection"));
           querySnapshot.forEach((doc) => {
-            let availability= doc.data().availability;
-            !availability && list.push({ id: doc.id, ...doc.data() });
+            let authorized= doc.data().authorized;
+            !authorized && list.push({ id: doc.id, ...doc.data() });
           });
           setData(list);
         } catch (err) {
@@ -95,7 +95,7 @@ const Datatable = () => {
         checkboxSelection
     
         getRowClassName={(params) =>
-          params.row.availability == false ? 'row' : null
+          params.row.authorized == false ? 'row' : null
         }
        
 

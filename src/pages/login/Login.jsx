@@ -57,7 +57,7 @@ const Login = () => {
         navigate("/");
       })
       .catch((err) => {
-        throw new Error("Wrong: Email or password");
+        throw new Error("Wrong: email or password");
       });
 
     } catch (err) {

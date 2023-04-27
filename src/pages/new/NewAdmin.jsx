@@ -24,45 +24,33 @@ const New = ({  title }) => {
 
   const handleAdd = async (e) => {
     e.preventDefault();
-
-    
-    
-    setStatus("Uploading Data ...")
+  
+    setStatus("Adding ...");
     setPer(50);
-
+  
     try {
-
-         await getDoc(doc(db, "USERDATA", email));
-    
-          await setDoc(doc(db, "ADMIN", email), {});
+      const docRef = doc(db, "USERDATA", email);
+      const docSnap = await getDoc(docRef);
       
-      
-
-      setStatus("Admin Added Successfully")
-
-      setTimeout(()=>
-      
-        navigate('/admins')
-      ,
-        2000
-      )
-     
-      
+      if (docSnap.exists()) {
+        await setDoc(doc(db, "ADMIN", email), {});
+  
+        setStatus("Admin Added Successfully");
+        setTimeout(() => navigate('/admins'), 2000);
+      } else {
+        setStatus("Email not found in USERDATA");
+        
+        setPer(null);
+      }
     } catch (err) {
       console.log(err);
-      setStatus(err.message)
-      setPer(null)
+      setStatus(err.message);
+      setPer(null);
     }
     
-    status &&  setTimeout(()=>
-      setStatus(null)
-    ,
-      4000
-    )
-    
-   
-
+    status && setTimeout(() => setStatus(null), 4000);
   }
+  
 
   return (
     <div className="new">

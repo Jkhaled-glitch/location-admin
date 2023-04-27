@@ -42,7 +42,8 @@ export const userColumns = [
 
 export const productColumns = [
   { field: "id", headerName: "Product ID", width: 160 },
-  { field: "availability",headerName: "AVAILABILITY",width: 130,},
+  { field: "authorized",headerName: "Authorized",width: 130,},
+  { field: "availability",headerName: "Available",width: 130,},
   { field: "city", headerName: "CITY", width: 160 },
   { field: "contactPerson",headerName: "Contact",width: 130,},
 

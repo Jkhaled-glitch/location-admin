@@ -15,7 +15,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { auth, db, storage } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { Upload } from "@mui/icons-material";
@@ -116,6 +116,12 @@ const Edit = ({  title }) => {
     setData({ ...data, availability: availability })
     
   }
+  const handleAuthorized = (event) => {
+    const authorized= event.target.value == "true" ? true:false;
+
+    setData({ ...data, authorized: authorized })
+    
+  }
 
 
   const handleEdit = async (e) => {
@@ -126,9 +132,13 @@ const Edit = ({  title }) => {
   
     try {
      
-      setStatus("Uploading images ...");
+      
       
         const promises = files.map((file) => uploadFiles(file));
+        if(files.length>0 )
+          setStatus("Uploading images ...");
+
+
         const urls = await Promise.all(promises);
 
         const images = urls.reduce((obj, url) => {
@@ -145,7 +155,7 @@ await updateDoc(doc(db, "HouseCollection", productId), {
   images: [...data.images,...imagesUrls]
 });
   
-      setStatus("House Added Successfully");
+      setStatus("House Editing Successfully");
   
       setTimeout(() => navigate(`/products/${productId}`), 3000);
     } catch (err) {
@@ -347,6 +357,34 @@ await updateDoc(doc(db, "HouseCollection", productId), {
                   </div>
                 </div>
 
+                <div className="GroupRadio">
+                  <h5>Authorized</h5>
+                  <div className="formRadio" > 
+                      <input
+                        id="yes"
+                        type="radio"
+                        value="true"
+                        checked={data.authorized === true}
+                        onChange={handleAuthorized}
+                        
+                      />
+                      <label htmlFor="true">true</label>
+                  </div>
+                  <div className="formRadio" > 
+                      
+                      <input
+                        id="no"
+                        type="radio"
+                        value="false"
+                        checked={data.authorized === false}
+                        onChange={handleAuthorized}
+                        
+                      />
+                      <label htmlFor="no">false</label>
+
+                  </div>
+                </div>
+
                 <button disabled={per !== null && per < 100} type="submit">
                   EDIT
                 </button>
@@ -355,7 +393,11 @@ await updateDoc(doc(db, "HouseCollection", productId), {
           </div>
           
         </div>
-        <div style={{display: (status?"flex":"none") }}  className="status bottom"><h5>{status}</h5></div>
+
+        <div style={{display: (status?"flex":"none") }}  className="status bottom">
+          <h5>{status}</h5>
+        </div>
+
       </div>
      
     </div>

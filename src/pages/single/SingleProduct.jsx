@@ -65,6 +65,13 @@ const Edit = ({  title }) => {
         placeholder: "500",
       },
       {
+        id: "views",
+        label: "Views",
+        value: data.views,
+        type: "number",
+        placeholder: "500",
+      },
+      {
         id: "city",
         label: "City",
         value: data.city,
@@ -104,6 +111,20 @@ const Edit = ({  title }) => {
         id: "post",
         label: "Post Number",
         value: data.post,
+        type: "number",
+        placeholder: "8160",
+      },
+      {
+        id: "availability",
+        label: "available",
+        value: data.availability  ? "true" : "false",
+        type: "number",
+        placeholder: "8160",
+      },
+      {
+        id: "authorized",
+        label: "Authorized",
+        value: data.authorized ? "true" : "false",
         type: "number",
         placeholder: "8160",
       },
@@ -153,16 +174,16 @@ const Edit = ({  title }) => {
           </div>
           <div className="right">
           <div className="images">
-  {data.images && (
-    <div className="imageRow">
-      {data.images.map((url,index) => (
-        <div key={index} className="imageCell">
-          <img src={url} alt="image" />
-        </div>
-      ))}
-    </div>
-  )}
-</div>
+              {data.images && (
+                <div className="imageRow">
+                  {data.images.map((url,index) => (
+                    <div key={index} className="imageCell">
+                      <img src={url} alt="image" />
+                    </div>
+                  ))}
+                </div>
+              )}
+          </div>
 
           </div>
           
