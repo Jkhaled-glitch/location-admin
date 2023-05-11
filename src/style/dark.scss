@@ -1,69 +1,267 @@
+
+$bg: rgb(167, 119, 28);
+$bg-hover: rgb(204, 159, 75);
+$color:#111;
+$border-color:#333;
+
+
+$bg-dark: #111;
+$bg-hover-dark: rgb(144, 143, 143);
+$color-dark:#999;
+$border-color-dark:#333;
+
+
+
+
 .app.dark {
-  background-color: #111;
-  color: rgb(156, 156, 156);
+  
+
+
+  background-color: $bg-dark;
+  color: $color-dark;
 
   .chartGrid {
-    stroke: rgba(228, 228, 228, 0.219);
+    stroke: $color-dark;
   }
 
   .table {
-    background-color: #111;
+    background-color: $bg-dark;
 
     .tableCell {
-      color: gray;
+      color: $color-dark;
     }
   }
 
   .navbar {
-    color: #999;
-    border-color: #333;
+    color: $color-dark;
+    border-color: $border-color-dark;
 
     .search {
-      border-color: gray;
+      border-color: $border-color-dark;
+    }
+  }
+ 
+  .sidebar {
+    border-color: $border-color-dark;
+    color: $color-dark;
+    background-color: $bg-dark;
+    
+    .top {
+      .logo {
+        color: $color-dark;
+      }
+    }
+   
+    ul {
+      li {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        cursor: pointer;
+        .icon {
+          font-size: 18px;
+          color: $color-dark;
+        }
+
+        span{
+            font-size: 13px;
+            font-weight: 600;
+            color: $color-dark;
+            margin-left: 10px;
+        }
+
+        &:hover {
+          background-color:$bg-hover-dark;
+          .icon {
+            color: $bg-dark;
+          }
+          span{
+              color: $bg-dark;
+          }
+        } 
+      }
+    }
+  }
+
+  .datatable {
+    .link{
+      color: #999;
+      border: 1px solid #999;
+    }
+    .datagrid {
+      color: gray;
+      border: none;
+      .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root{
+        color:gray;
+      }
+      .viewButton,
+      .deleteButton,
+      .cellWithStatus {
+        color: gray;
+        border-color: #999;
+      }
+      
+    }
+  }
+  
+
+  input{
+      background-color:$color-dark ;
+      color: $bg-dark;
+      border-color: $border-color-dark;
+  }
+  .btn-add{
+    color: $color-dark;
+    background-color: $color;
+    box-shadow: 1px 2px 4px $border-color-dark ;
+    &:hover{
+     box-shadow: 1px 2px 4px $color-dark;
+     
+    }
+   }
+
+   .btn{
+    color: $color-dark;
+    background-color: $bg-dark;
+    box-shadow: 1px 2px 4px $border-color-dark ;
+    &:hover{
+     box-shadow: 1px 2px 4px $color-dark;
+     background-color: $bg-hover-dark;
+     color: $bg-dark;
+    }
+    
+    &:disabled{
+     background-color: $bg-hover-dark;
+     color: $bg-dark;
+    }
+  }
+
+  .delete{
+     box-shadow: 0 2px 4px $bg-dark;
+     background-color: $color-dark;
+    
+     &:before  {
+      background-color: $bg-dark;
+      }
+
+      &:after {
+        background-color: $bg-dark;
+        }
+     
+  }
+}
+
+
+.app {
+  background-color: $bg;
+  color: $color;
+
+  .chartGrid {
+    stroke: $color;
+  }
+
+  .table {
+    .tableCell {
+      color: $color;
+    }
+  }
+
+  .navbar {
+    color: $color;
+    .search {
+      border-color: $color;
     }
   }
 
   .sidebar {
-    background-color: #111;
-    border-color: #333;
-
+    background-color: $bg;
+    color: $color;
+ 
     .top {
       .logo {
-        color: #999;
+        color: $color;
       }
     }
-    hr {
-      border-color: #333;
-    }
-
     ul {
       li {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        cursor: pointer;
+
         &:hover {
-          background-color: #333;
+          background-color:$bg-hover; 
         }
 
         .icon {
-          color: #999;
+          font-size: 18px;
+          color: $color;
+        }
+
+        span{
+            font-size: 13px;
+            font-weight: 600;
+            color:$color;
+            margin-left: 10px;
         }
       }
     }
   }
 
   .datatable {
+    .link{ 
+      color: $color;
+      border: 1px solid  $color;
+    }
     .datagrid {
-      color: gray;
+      color: $color;
       border: none;
-
-      .viewButton,
-      .deleteButton,
-      .cellWithStatus {
-        color: gray;
-        border: none;
-      }
     }
   }
 
-  input{
-      background-color: transparent;
+    input{
+      background-color:$color ;
+      color: $bg;
+      border-color: $border-color;
   }
+
+  .btn-add{
+    color: $color;
+    background-color: $bg;
+    box-shadow: 1px 2px 4px $border-color ;
+    &:hover{
+     box-shadow: 1px 2px 4px $color;
+     
+    }
+   }
+
+   .btn{
+    color: $color;
+    background-color: $bg;
+    box-shadow: 1px 2px 4px $border-color ;
+    &:hover{
+     box-shadow: 1px 2px 4px $color;
+     background-color: $bg-hover;
+    }
+    
+    &:disabled{
+     background-color: $bg-hover;
+      
+    }
+  }
+  .delete{
+    box-shadow: 0 2px 4px $bg;
+    background-color: $color;
+   
+    &:before  {
+     background-color: $bg;
+     }
+
+     &:after {
+       background-color: $bg;
+       }
+    
+ }
+  
 }
+

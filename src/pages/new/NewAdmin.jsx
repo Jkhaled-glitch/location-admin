@@ -58,7 +58,7 @@ const New = ({  title }) => {
       <div className="newContainer">
         <Navbar />
         <div className="top">
-          <h1>{title}</h1>
+          <h3>{title}</h3>
         </div>
         <div className="bottom">
           
@@ -79,7 +79,7 @@ const New = ({  title }) => {
                 </div>
               
                 
-              <button disabled={per !== null && per < 100} type="submit">
+              <button className="btn" disabled={per !== null && per < 100} type="submit">
                 ADD
               </button>
             </form>

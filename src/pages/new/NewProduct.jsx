@@ -154,7 +154,7 @@ await setDoc(doc(db, "HouseCollection", documentUid), {
       <div className="newContainer">
         <Navbar />
         <div className="top">
-          <h1>{title}</h1>
+        <h3>{title}</h3>
         </div>
         <div className="bottom">
           <div className="left ">
@@ -257,7 +257,7 @@ await setDoc(doc(db, "HouseCollection", documentUid), {
 
               
                 
-              <button disabled={per !== null && per < 100} type="submit">
+              <button className="btn" disabled={per !== null && per < 100} type="submit">
                 ADD
               </button>
             </form>

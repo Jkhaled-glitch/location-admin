@@ -137,7 +137,7 @@ const New = ({ inputs, title }) => {
       <div className="newContainer">
         <Navbar />
         <div className="top">
-          <h1>{title}</h1>
+        <h3>{title}</h3>
         </div>
         <div className="bottom">
           <div className="left">

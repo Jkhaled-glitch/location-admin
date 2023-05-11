@@ -55,17 +55,21 @@ const Datatable = () => {
   const actionColumn = [
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Actions",
       width: 200,
       renderCell: (params) => {
         return (
           <div className="cellAction">
             
               <div className="viewButton"
-              onClick={() => handleView(params.row.id)} >View</div>
+                onClick={() => handleView(params.row.id)} >
+                  View
+              </div>
 
-<div className="viewButton"
-              onClick={() => handleEdit(params.row.id)} >Edit</div>
+              <div className="viewButton"
+                 onClick={() => handleEdit(params.row.id)} >
+                Edit
+              </div>
             
             <div
               className="deleteButton"
@@ -76,7 +80,7 @@ const Datatable = () => {
           </div>
         );
       },
-    },
+    }
   ];
   return (
     <div className="datatable">

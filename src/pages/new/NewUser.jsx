@@ -153,7 +153,7 @@ const New = ({ inputs, title }) => {
       <div className="newContainer">
         <Navbar />
         <div className="top">
-          <h1>{title}</h1>
+        <h3>{title}</h3>
         </div>
         <div className="bottom">
           <div className="left">
@@ -197,7 +197,7 @@ const New = ({ inputs, title }) => {
               
           
               <div className="GroupRadio">
-                <h5>Account Type</h5>
+                <h5>Account Type </h5>
                 <div className="formRadio" > 
                     <input
                       id="CUSTOMER"
@@ -226,7 +226,7 @@ const New = ({ inputs, title }) => {
 
               
                 
-              <button disabled={per !== null && per < 100} type="submit">
+              <button className="btn" disabled={per !== null && per < 100} type="submit">
                 ADD
               </button>
             </form>

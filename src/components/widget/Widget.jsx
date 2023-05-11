@@ -6,7 +6,7 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const Widget = ({ type }) => {
       data = {
         title: "USERS",
         isMoney: false,
-        link: "See all users",
+        link: "See Users",
         query:"USERDATA",
         icon: (
           <PersonOutlinedIcon
@@ -84,26 +84,57 @@ const Widget = ({ type }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      
       const today = new Date();
+      
       const lastMonth = new Date(new Date().setMonth(today.getMonth() - 1));
+   
       const prevMonth = new Date(new Date().setMonth(today.getMonth() - 2));
+
+    
+      
+      const lastMonthQuery= query(
+        collection(db, data.query),
+        where("addedDate", "<=", today),
+        where("addedDate", ">", lastMonth),
+      );
+      const prevMonthQuery= query(
+        collection(db, data.query),
+        where("addedDate", "<=", lastMonth),
+        where("addedDate", ">", prevMonth),
+      );
+
+      const lastMonthData = await getDocs(lastMonthQuery)
+      const prevMonthData = await getDocs(prevMonthQuery)
+
 
       const all= query(
         collection(db, data.query),
-        //where("timeStamp", "<=", today)
       );
 
       const allData = await getDocs(all);
 
       setAmount(allData.docs.length);
-     /* setDiff(
-        ((lastMonthData.docs.length - prevMonthData.docs.length) / prevMonthData.docs.length) *
-          100
-      );
-      */
+
+      if (prevMonthData.docs.length === 0) {
+        if (lastMonthData.docs.length === 0) {
+          setDiff(0)
+        } else{
+          setDiff(100)
+        }
+
+      } else {
+
+        setDiff( (((lastMonthData.docs.length - prevMonthData.docs.length) / prevMonthData.docs.length) * 100).toFixed(2)) ;
+         
+      }
+      
+      
     };
     fetchData();
   }, []);
+  
+
 
   const navigate=useNavigate();
 
@@ -120,7 +151,7 @@ const Widget = ({ type }) => {
       <div className="right">
         <div className={`percentage ${diff < 0 ? "negative" : "positive"}`}>
           {diff < 0 ? <KeyboardArrowDownIcon/> : <KeyboardArrowUpIcon/> }
-          {diff} %
+          {Math.abs(diff)} %
         </div>
         {data.icon}
       </div>

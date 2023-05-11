@@ -385,7 +385,7 @@ await updateDoc(doc(db, "HouseCollection", productId), {
                   </div>
                 </div>
 
-                <button disabled={per !== null && per < 100} type="submit">
+                <button className="btn" disabled={per !== null && per < 100} type="submit">
                   EDIT
                 </button>
             </form>
